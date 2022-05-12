@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+      <title>Маршрут</title>
+      <meta charset="utf-8">
+      <link rel="shortcut icon" href="sight.ico" type="image/x-icon">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="css.css">
+</head>
+
+<body>
+      <div id="menu">
+            <ul>
+                  <a href="index.html">
+                        <li> Карта </li>
+                  </a>
+                  <a href="aboutproject.html">
+                        <li> Инфо </li>
+                  </a>
+            </ul>
+      </div>
+
+      <div id="map"></div>
+
+      <script>
+
+            var markers = [];
+            function initMap() {
+                  {
+                        map = new google.maps.Map(document.getElementById('map'), {
+                              zoom: 14,
+                              center: { lat: 53.88933170157991, lng: 30.43360926982876 },
+                              mapTypeControl: true,
+                              mapTypeControlOptions: {
+                                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                                    position: google.maps.ControlPosition.TOP_CENTER
+                              },
+                              zoomControl: true,
+                              zoomControlOptions: {
+                                    position: google.maps.ControlPosition.BOTTOM_RIGTH
+                              },
+                              scaleControl: true,
+                              streetViewControl: false,
+                              streetViewControlOptions: {
+                                    position: google.maps.ControlPosition.LEFT_TOP
+                              },
+                              fullscreenControl: true
+                        });
+                  }
+
+                  // places
+
+                  addMarker({
+                        coordinates: { lat: 53.887535, lng: 30.416214 },
+                        image: 'sight.png',
+                        info: '<h3>Братская могила по улице Автозаводской</h3>' +
+                              '<p style="width: 100%">После освобождения Могилева первые госпитали появились на поселке авторемзавода. 4 июля 1944 года сюда прибыл эвакогоспиталь №2988 и пробыл в городе два месяца. Через девять дней появился эвакогоспиталь №1252, он оставался в Могилеве до 30 августа 1944 года. В ноябре 1944 года их заменили тыловые эвакогоспиталя №4409 и 5130. После победы над Германией они в течение 1945 года были расформированы. Из архивных документов видно, что умерших от ран бойцов хоронили в братские могилы, офицеров - в индивидуальные могилы на берегу Днепра. Так появилось на поселке авторемзавода новое кладбище. Захоронены здесь и шесть воинов, которые освобождали Могилев в июне 1944 года. Судя по номерам полков: 830 сп, 878 сп, 609 сп, попали они сюда случайно, вероятно в ходе послевоенных перезахоронений. По паспорту захоронения сейчас индивидуальных могил на кладбище нет, а есть братская, в которой покоятся 67 человек.</p>' +
+                              '<p><img style="width: 100%; height: auto;" src="img/mogilev-bratskaya-mogila.jpg"></p>'
+                  });
+
+                  addMarker({
+                        coordinates: { lat: 53.891545316557334, lng: 30.438938073278614 },
+                        image: 'sight.png',
+                        info: '<h3>Святой источник</h3>' +
+                              '<p style="width: 100%"></p>' +
+                              '<p><img style="width: 100%; height: auto;" src="img/svist.jpg"></p>'
+                  });
+
+                  addMarker({
+                        coordinates: { lat: 53.89364342777495, lng: 30.44486694745187 },
+                        image: 'sight.png',
+                        info: '<h3>Поляна ветеранов</h3>' +
+                              '<p style="width: 100%"></p>'
+                  });
+
+                  function addMarker(properties) {
+                        var marker = new google.maps.Marker({
+                              position: properties.coordinates,
+                              map: map,
+                              icon: properties.image,
+                              animation: google.maps.Animation.DROP,
+                        });
+
+                        // icon
+                        if (properties.image) {
+                              marker.setIcon(properties.image);
+                        }
+
+                        // desc
+                        if (properties.info) {
+                              var InfoWindow = new google.maps.InfoWindow({
+                                    content: properties.info
+                              });
+
+                              //открытие маркера
+                              marker.addListener('click', function () {
+                                    InfoWindow.open(map, marker);
+                              });
+
+                              map.addListener('click', function () {
+                                    InfoWindow.close(map, marker);
+                              })
+                        }
+
+                        markers.push(marker);
+                  }
+
+                  const flightPlanCoordinates = markers.map(function (v) {
+                        return v.position
+                  })
+
+                  const flightPath = new google.maps.Polyline({
+                        path: flightPlanCoordinates,
+                        geodesic: true,
+                        strokeColor: "#9370DB",
+                        strokeOpacity: 1.0,
+                        strokeWeight: 4
+                  });
+
+                  flightPath.setMap(map);
+            }
+
+            var styleControl = document.getElementById('style-selector-control');
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(styleControl);
+
+      </script>
+
+      <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8_mij7maSmO4JOGEfMDlfgEHBGWuMxJ4&callback=initMap">
+            </script>
+</body>
+
+</html>
